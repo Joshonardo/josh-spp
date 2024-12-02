@@ -3,16 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirect Button</title>
+    <title>Link to ShopeePay</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        header {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            margin: 20px 0;
+        }
+        header img {
+            max-width: 80px;
+            margin: 0 10px;
+        }
+        main {
+            margin: 20px 0;
+        }
+        main img {
+            width: 200px;
+            height: 200px;
+            margin: 20px 0;
         }
         button {
             padding: 15px 30px;
@@ -22,14 +42,31 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 20px;
         }
         button:hover {
             background-color: #0056b3;
         }
+        footer {
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
-    <button onclick="redirect()">Click to Visit</button>
+    <header>
+        <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-ShopeePay-V.png" alt="Payment Logo">
+        <span style="font-size: 18px; font-weight: bold;">↔</span>
+        <img src="https://en.m.wikipedia.org/wiki/File:Google_%22G%22_logo.svg" alt="Merchant Logo">
+    </header>
+    <main>
+        <p style="font-size: 16px; color: #333;">
+            Click the push notification, or tap on the QR code / scan the QR code to open ShopeePay App.
+        </p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?data=www.shopeepay.com&size=200x200" alt="QR Code">
+    </main>
+    <footer>
+        <button onclick="redirect()">Go to ShopeePay</button>
+    </footer>
 
     <script>
         function redirect() {
