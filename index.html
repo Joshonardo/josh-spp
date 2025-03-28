@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Update CCMS Greyscale</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
@@ -124,6 +124,8 @@
         updateTime: getCurrentTimestampGMT8(),
         productFlow: updateParams.productFlow || "-",
         paymentChannel: updateParams.paymentChannel || "-",
+        userScope: updateParams.userScope || "-",
+        merchantScope: updateParams.merchantScope || "-",
         greyscale: updateParams.greyscale || "-",
         remark: updateParams.remark || "-"
     };
@@ -147,6 +149,8 @@
         updateTime: getCurrentTimestampGMT8(),
         productFlow: logs[0].productFlow,
         paymentChannel: logs[0].paymentChannel,
+        paymentChannel: logs[0].userScope,
+        paymentChannel: logs[0].merchantScope,
         greyscale: previousGreyscale,  // Rollback to previous value
         remark: "Rollback"
     };
@@ -183,6 +187,24 @@
                     </div>
 
                     <div className="form-group">
+                        <label>User scope:</label>
+                        <select onChange={(e) => setUpdateParams({ ...updateParams, userScope: e.target.value })}>
+                            <option value="">Select</option>
+                            <option value="On-us">On-us</option>
+                            <option value="Off-us">Off-us</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Merchant scope:</label>
+                        <select onChange={(e) => setUpdateParams({ ...updateParams, merchantScope: e.target.value })}>
+                            <option value="">Select</option>
+                            <option value="On-us">On-us</option>
+                            <option value="Off-us">Off-us</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group">
                         <label>Greyscale %:</label>
                         <input type="number" min="0" max="100" placeholder="Enter %" onChange={(e) => setUpdateParams({ ...updateParams, greyscale: e.target.value })} />
                     </div>
@@ -205,6 +227,8 @@
                                 <th>Update Time (GMT+8)</th>
                                 <th>Product Flow</th>
                                 <th>Payment Channel</th>
+                                <th>User Scope</th>
+                                <th>Merchant Scope</th>
                                 <th>Greyscale %</th>
                                 <th>Remark</th>
                                 <th>Action</th>
