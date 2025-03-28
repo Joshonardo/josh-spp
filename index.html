@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background: #F4F4F4;
             margin: 0;
             padding: 20px;
         }
@@ -41,7 +41,7 @@
         }
         button {
             cursor: pointer;
-            background: #007bff;
+            background: #007BFF;
             color: white;
             border: none;
             padding: 10px 15px;
@@ -49,10 +49,10 @@
             margin-top: 10px;
         }
         button:hover {
-            background: #0056b3;
+            background: #0056B3;
         }
         .success-banner {
-            background: #28a745;
+            background: #28A745;
             color: white;
             padding: 10px;
             text-align: center;
@@ -73,39 +73,33 @@
             text-align: left;
         }
         th {
-            background: #007bff;
+            background: #007BFF;
             color: white;
         }
     </style>
 </head>
 <body>
-
     <div id="root"></div>
-
     <script type="text/babel">
         function AdminDashboard() {
             const [searchParams, setSearchParams] = React.useState({
                 productFlow: "",
                 paymentChannel: ""
             });
-
             const [updateParams, setUpdateParams] = React.useState({
                 productFlow: "",
                 paymentChannel: "",
                 greyscale: "",
                 remark: ""
             });
-
             const [searchResults, setSearchResults] = React.useState(null);
             const [updateSuccess, setUpdateSuccess] = React.useState(false);
             const [logs, setLogs] = React.useState([]);
             const [changeIdCounter, setChangeIdCounter] = React.useState(1);
-
             const getCurrentTimestampGMT8 = () => {
                 const now = new Date();
                 return new Date(now.getTime() + 8 * 60 * 60 * 1000).toISOString().replace("T", " ").slice(0, 19);
             };
-
             const handleSearch = () => {
                 console.log("Searching with params", searchParams);
                 setSearchResults([
@@ -113,13 +107,10 @@
                     { productFlow: "BsC", paymentChannel: "SPL", status: "Inactive" }
                 ]);
             };
-
             const handleUpdate = () => {
                 console.log("Updating greyscale %", updateParams);
-
                 setUpdateSuccess(true);
-                setTimeout(() => setUpdateSuccess(false), 3000); // Hide banner after 3s
-
+                setTimeout(() => setUpdateSuccess(false), 3000);
                 const newLog = {
                     changeId: changeIdCounter,
                     operator: "josh.tsaoch@seamoney.com",
@@ -129,40 +120,33 @@
                     greyscale: updateParams.greyscale || "-",
                     remark: updateParams.remark || "-"
                 };
-
                 setLogs([newLog, ...logs]);
                 setChangeIdCounter(changeIdCounter + 1);
             };
-
             return (
                 <div className="container">
                     <h1>Admin Dashboard</h1>
-
                     {/* Search Greyscale % */}
                     <h2>Search Greyscale %</h2>
-                    
                     <div className="form-group">
                         <label>Product Flow:</label>
-                        <select onChange={(e) => setSearchParams({ ...searchParams, productFlow: e.target.value })}>
+                        <select value={searchParams.productFlow} onChange={(e) => setSearchParams({ ...searchParams, productFlow: e.target.value })}>
                             <option value="">Select</option>
                             <option value="CsB">CsB</option>
                             <option value="BsC">BsC</option>
                             <option value="CwS">CwS</option>
                         </select>
                     </div>
-
                     <div className="form-group">
                         <label>Payment Channel:</label>
-                        <select onChange={(e) => setSearchParams({ ...searchParams, paymentChannel: e.target.value })}>
+                        <select value={searchParams.paymentChannel} onChange={(e) => setSearchParams({ ...searchParams, paymentChannel: e.target.value })}>
                             <option value="">Select</option>
                             <option value="Wallet">Wallet</option>
                             <option value="SPL">SPL</option>
                             <option value="SeaBank">SeaBank</option>
                         </select>
                     </div>
-
                     <button onClick={handleSearch}>Search</button>
-
                     {/* Search Results Table */}
                     {searchResults && (
                         <table>
@@ -184,43 +168,36 @@
                             </tbody>
                         </table>
                     )}
-
                     {/* Update Greyscale % */}
                     <h2>Update Greyscale %</h2>
-                    
                     <div className="form-group">
                         <label>Product Flow:</label>
-                        <select onChange={(e) => setUpdateParams({ ...updateParams, productFlow: e.target.value })}>
+                        <select value={updateParams.productFlow} onChange={(e) => setUpdateParams({ ...updateParams, productFlow: e.target.value })}>
                             <option value="">Select</option>
                             <option value="CsB">CsB</option>
                             <option value="BsC">BsC</option>
                             <option value="CwS">CwS</option>
                         </select>
                     </div>
-
                     <div className="form-group">
                         <label>Payment Channel:</label>
-                        <select onChange={(e) => setUpdateParams({ ...updateParams, paymentChannel: e.target.value })}>
+                        <select value={updateParams.paymentChannel} onChange={(e) => setUpdateParams({ ...updateParams, paymentChannel: e.target.value })}>
                             <option value="">Select</option>
                             <option value="Wallet">Wallet</option>
                             <option value="SPL">SPL</option>
                             <option value="SeaBank">SeaBank</option>
                         </select>
                     </div>
-
                     <div className="form-group">
                         <label>Greyscale %:</label>
                         <input type="number" min="0" max="100" placeholder="Enter %" onChange={(e) => setUpdateParams({ ...updateParams, greyscale: e.target.value })} />
                     </div>
-
                     <div className="form-group">
                         <label>Remark:</label>
                         <input type="text" placeholder="Enter remark" onChange={(e) => setUpdateParams({ ...updateParams, remark: e.target.value })} />
                     </div>
-
                     <button onClick={handleUpdate}>Update</button>
                     {updateSuccess && <div className="success-banner">Update successful!</div>}
-
                     {/* Update Logs Table */}
                     <h2>Update Logs</h2>
                     <table>
@@ -252,9 +229,7 @@
                 </div>
             );
         }
-
         ReactDOM.createRoot(document.getElementById("root")).render(<AdminDashboard />);
     </script>
-
 </body>
 </html>
