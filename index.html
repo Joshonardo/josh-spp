@@ -51,12 +51,6 @@
         button:hover {
             background: #0056b3;
         }
-        .log {
-            margin-top: 10px;
-            padding: 10px;
-            background: #e8f5e9;
-            border-left: 5px solid #4caf50;
-        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -83,9 +77,7 @@
         function AdminDashboard() {
             const [searchParams, setSearchParams] = React.useState({
                 productFlow: "",
-                paymentChannel: "",
-                userScope: "",
-                merchantScope: ""
+                paymentChannel: ""
             });
 
             const [updateParams, setUpdateParams] = React.useState({
@@ -97,10 +89,15 @@
             const [searchResults, setSearchResults] = React.useState(null);
             const [updateStatus, setUpdateStatus] = React.useState(null);
             const [logs, setLogs] = React.useState([]);
+            const [changeIdCounter, setChangeIdCounter] = React.useState(1);
+
+            const getCurrentTimestampGMT8 = () => {
+                const now = new Date();
+                return new Date(now.getTime() + 8 * 60 * 60 * 1000).toISOString().replace("T", " ").slice(0, 19);
+            };
 
             const handleSearch = () => {
                 console.log("Searching with params", searchParams);
-                // Mock data for search results
                 setSearchResults([
                     { productFlow: searchParams.productFlow || "CsB", paymentChannel: searchParams.paymentChannel || "Wallet", status: "Active" },
                     { productFlow: "BsC", paymentChannel: "SPL", status: "Inactive" }
@@ -110,7 +107,18 @@
             const handleUpdate = () => {
                 console.log("Updating greyscale %", updateParams);
                 setUpdateStatus({ success: true, message: "Update successful!" });
-                setLogs([...logs, { timestamp: new Date().toLocaleString(), status: "Success" }]);
+
+                const newLog = {
+                    changeId: changeIdCounter,
+                    operator: "josh.tsaoch@seamoney.com",
+                    updateTime: getCurrentTimestampGMT8(),
+                    productFlow: updateParams.productFlow || "-",
+                    paymentChannel: updateParams.paymentChannel || "-",
+                    remark: updateParams.remark || "-"
+                };
+
+                setLogs([newLog, ...logs]);
+                setChangeIdCounter(changeIdCounter + 1);
             };
 
             return (
@@ -193,15 +201,34 @@
                     </div>
 
                     <button onClick={handleUpdate}>Update</button>
-                    {updateStatus && <p className="log">{updateStatus.message}</p>}
+                    {updateStatus && <p>{updateStatus.message}</p>}
 
-                    {/* Update Logs */}
+                    {/* Update Logs Table */}
                     <h2>Update Logs</h2>
-                    {logs.map((log, index) => (
-                        <div key={index} className="log">
-                            {log.timestamp} - {log.status}
-                        </div>
-                    ))}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Change ID</th>
+                                <th>Operator</th>
+                                <th>Update Time (GMT+8)</th>
+                                <th>Product Flow</th>
+                                <th>Payment Channel</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {logs.map((log) => (
+                                <tr key={log.changeId}>
+                                    <td>{log.changeId}</td>
+                                    <td>{log.operator}</td>
+                                    <td>{log.updateTime}</td>
+                                    <td>{log.productFlow}</td>
+                                    <td>{log.paymentChannel}</td>
+                                    <td>{log.remark}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             );
         }
