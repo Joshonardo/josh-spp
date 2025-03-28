@@ -108,51 +108,52 @@
             };
 
             const handleUpdate = () => {
-                console.log("Updating greyscale %", updateParams);
+    console.log("Updating greyscale %", updateParams);
 
-                setUpdateSuccess(true);
-                setTimeout(() => setUpdateSuccess(false), 3000); // Hide banner after 3s
+    setUpdateSuccess(true);
+    setTimeout(() => setUpdateSuccess(false), 3000);
 
-                // Store previous greyscale before updating
-                if (logs.length > 0) {
-                    setPreviousGreyscale(logs[0].greyscale);
-                }
+    // Store previous greyscale for rollback
+    if (logs.length > 0) {
+        setPreviousGreyscale(logs[0].greyscale);
+    }
 
-                const newLog = {
-                    changeId: changeIdCounter,
-                    operator: "josh.tsaoch@seamoney.com",
-                    updateTime: getCurrentTimestampGMT8(),
-                    productFlow: updateParams.productFlow || "-",
-                    paymentChannel: updateParams.paymentChannel || "-",
-                    greyscale: updateParams.greyscale || "-",
-                    remark: updateParams.remark || "-"
-                };
+    const newLog = {
+        changeId: changeIdCounter,
+        operator: "josh.tsaoch@seamoney.com",
+        updateTime: getCurrentTimestampGMT8(),
+        productFlow: updateParams.productFlow || "-",
+        paymentChannel: updateParams.paymentChannel || "-",
+        greyscale: updateParams.greyscale || "-",
+        remark: updateParams.remark || "-"
+    };
 
-                setLogs([newLog, ...logs]);
-                setChangeIdCounter(changeIdCounter + 1);
-            };
+    // Ensure logs are sorted (latest first)
+    setLogs([newLog, ...logs]);
+    setChangeIdCounter(changeIdCounter + 1);
+};
 
             const handleRollback = () => {
-                if (logs.length === 0 || previousGreyscale === null) return;
+    if (logs.length === 0 || previousGreyscale === null) return;
 
-                console.log("Rolling back to:", previousGreyscale);
+    console.log("Rolling back to:", previousGreyscale);
 
-                setUpdateSuccess(true);
-                setTimeout(() => setUpdateSuccess(false), 3000); // Hide banner after 3s
+    setUpdateSuccess(true);
+    setTimeout(() => setUpdateSuccess(false), 3000);
 
-                const rollbackLog = {
-                    changeId: changeIdCounter,
-                    operator: "josh.tsaoch@seamoney.com",
-                    updateTime: getCurrentTimestampGMT8(),
-                    productFlow: logs[0].productFlow,
-                    paymentChannel: logs[0].paymentChannel,
-                    greyscale: previousGreyscale,
-                    remark: "Rollback"
-                };
+    const rollbackLog = {
+        changeId: changeIdCounter,
+        operator: "josh.tsaoch@seamoney.com",
+        updateTime: getCurrentTimestampGMT8(),
+        productFlow: logs[0].productFlow,
+        paymentChannel: logs[0].paymentChannel,
+        greyscale: previousGreyscale,  // Rollback to previous value
+        remark: "Rollback"
+    };
 
-                setLogs([rollbackLog, ...logs]);
-                setChangeIdCounter(changeIdCounter + 1);
-            };
+    setLogs([rollbackLog, ...logs]);  // Keep logs sorted
+    setChangeIdCounter(changeIdCounter + 1);
+};
 
             return (
                 <div className="container">
@@ -210,23 +211,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {logs.map((log, index) => (
-                                <tr key={log.changeId}>
-                                    <td>{log.changeId}</td>
-                                    <td>{log.operator}</td>
-                                    <td>{log.updateTime}</td>
-                                    <td>{log.productFlow}</td>
-                                    <td>{log.paymentChannel}</td>
-                                    <td>{log.greyscale}</td>
-                                    <td>{log.remark}</td>
-                                    <td>
-                                        {index === 0 && log.remark !== "Rollback" && (
-                                            <button className="rollback-btn" onClick={handleRollback}>Rollback</button>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
+    {logs.map((log, index) => (
+        <tr key={log.changeId}>
+            <td>{log.changeId}</td>
+            <td>{log.operator}</td>
+            <td>{log.updateTime}</td>
+            <td>{log.productFlow}</td>
+            <td>{log.paymentChannel}</td>
+            <td>{log.greyscale}</td>
+            <td>{log.remark}</td>
+            <td>
+                {index === 0 && log.remark !== "Rollback" && (
+                    <button className="rollback-btn" onClick={handleRollback}>Rollback</button>
+                )}
+            </td>
+        </tr>
+    ))}
+</tbody>
                     </table>
                 </div>
             );
