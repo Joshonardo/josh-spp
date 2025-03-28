@@ -18,54 +18,52 @@ export default function AdminDashboard() {
 
   const handleSearch = () => {
     console.log("Searching with params", searchParams);
-    // Implement API call to fetch data
   };
 
   const handleUpdate = () => {
     console.log("Updating greyscale %", searchParams);
-    // Implement API call to update greyscale %
     setUpdateStatus({ success: true, message: "Update successful!" });
     setLogs([...logs, { timestamp: new Date().toISOString(), status: "Success" }]);
   };
 
   return (
-    <div className="flex h-screen">
-      <Sidebar>
-        <div className="p-4">CCMS</div>
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar className="w-64 bg-blue-800 text-white p-4">
+        <h2 className="text-xl font-bold">CCMS</h2>
       </Sidebar>
       <div className="flex-1 p-6">
-        <h1 className="text-xl font-bold">Admin Dashboard</h1>
-        <Card className="mt-4 p-4">
-          <h2 className="text-lg font-semibold">Search Greyscale %</h2>
-          <div className="grid grid-cols-2 gap-4 mt-2">
-            <Input placeholder="Product Flow" onChange={(e) => setSearchParams({ ...searchParams, productFlow: e.target.value })} />
-            <Input placeholder="Payment Channel" onChange={(e) => setSearchParams({ ...searchParams, paymentChannel: e.target.value })} />
-            <Input placeholder="User Scope" onChange={(e) => setSearchParams({ ...searchParams, userScope: e.target.value })} />
-            <Input placeholder="Merchant Scope" onChange={(e) => setSearchParams({ ...searchParams, merchantScope: e.target.value })} />
+        <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
+        <Card className="mt-6 p-6 bg-white shadow-lg rounded-lg">
+          <h2 className="text-lg font-semibold text-gray-700">Search Greyscale %</h2>
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <Input className="p-2 border rounded" placeholder="Product Flow" onChange={(e) => setSearchParams({ ...searchParams, productFlow: e.target.value })} />
+            <Input className="p-2 border rounded" placeholder="Payment Channel" onChange={(e) => setSearchParams({ ...searchParams, paymentChannel: e.target.value })} />
+            <Input className="p-2 border rounded" placeholder="User Scope" onChange={(e) => setSearchParams({ ...searchParams, userScope: e.target.value })} />
+            <Input className="p-2 border rounded" placeholder="Merchant Scope" onChange={(e) => setSearchParams({ ...searchParams, merchantScope: e.target.value })} />
           </div>
-          <Button className="mt-2" onClick={handleSearch}>Search</Button>
+          <Button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={handleSearch}>Search</Button>
         </Card>
 
-        <Card className="mt-4 p-4">
-          <h2 className="text-lg font-semibold">Update Greyscale %</h2>
-          <Button className="mt-2" onClick={handleUpdate}>Update</Button>
-          {updateStatus && <Alert className="mt-2">{updateStatus.message}</Alert>}
+        <Card className="mt-6 p-6 bg-white shadow-lg rounded-lg">
+          <h2 className="text-lg font-semibold text-gray-700">Update Greyscale %</h2>
+          <Button className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" onClick={handleUpdate}>Update</Button>
+          {updateStatus && <Alert className="mt-4 text-green-700">{updateStatus.message}</Alert>}
         </Card>
 
-        <Card className="mt-4 p-4">
-          <h2 className="text-lg font-semibold">Update Logs</h2>
-          <Table>
+        <Card className="mt-6 p-6 bg-white shadow-lg rounded-lg">
+          <h2 className="text-lg font-semibold text-gray-700">Update Logs</h2>
+          <Table className="mt-4 w-full border-collapse border border-gray-300">
             <TableHeader>
-              <TableRow>
-                <TableHead>Timestamp</TableHead>
-                <TableHead>Status</TableHead>
+              <TableRow className="bg-gray-200">
+                <TableHead className="border p-2">Timestamp</TableHead>
+                <TableHead className="border p-2">Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {logs.map((log, index) => (
-                <TableRow key={index}>
-                  <TableCell>{log.timestamp}</TableCell>
-                  <TableCell>{log.status}</TableCell>
+                <TableRow key={index} className="hover:bg-gray-100">
+                  <TableCell className="border p-2">{log.timestamp}</TableCell>
+                  <TableCell className="border p-2">{log.status}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
