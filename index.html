@@ -11,7 +11,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #F4F4F4;
+      background: #f4f4f4;
       margin: 0;
       padding: 20px;
     }
@@ -38,11 +38,8 @@
       font-weight: bold;
     }
     .tab.active {
-      border-bottom-color: #007BFF;
-      color: #007BFF;
-    }
-    h1, h2 {
-      text-align: center;
+      border-bottom-color: #007bff;
+      color: #007bff;
     }
     .form-group {
       margin: 10px 0;
@@ -60,7 +57,7 @@
     }
     button {
       cursor: pointer;
-      background: #007BFF;
+      background: #007bff;
       color: white;
       border: none;
       padding: 10px 15px;
@@ -68,10 +65,10 @@
       margin-top: 10px;
     }
     button:hover {
-      background: #0056B3;
+      background: #0056b3;
     }
     .success-banner {
-      background: #28A745;
+      background: #28a745;
       color: white;
       padding: 10px;
       text-align: center;
@@ -92,7 +89,7 @@
       text-align: left;
     }
     th {
-      background: #007BFF;
+      background: #007bff;
       color: white;
     }
   </style>
@@ -165,9 +162,8 @@
             <button className={`tab ${activeTab === "update" ? "active" : ""}`} onClick={() => setActiveTab("update")}>Update CCMS</button>
           </div>
 
-          {activeTab === "search" && (
+          {activeTab === "search" ? (
             <>
-              <h2>Search Greyscale %</h2>
               <div className="form-group">
                 <label>Product Flow:</label>
                 <select value={searchParams.productFlow} onChange={(e) => setSearchParams({ ...searchParams, productFlow: e.target.value })}>
@@ -187,6 +183,7 @@
                 </select>
               </div>
               <button onClick={handleSearch}>Search</button>
+
               {searchResults && (
                 <table>
                   <thead>
@@ -197,22 +194,19 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {searchResults.map((r, i) => (
-                      <tr key={i}>
-                        <td>{r.productFlow}</td>
-                        <td>{r.paymentChannel}</td>
-                        <td>{r.status}</td>
+                    {searchResults.map((result, index) => (
+                      <tr key={index}>
+                        <td>{result.productFlow}</td>
+                        <td>{result.paymentChannel}</td>
+                        <td>{result.status}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               )}
             </>
-          )}
-
-          {activeTab === "update" && (
+          ) : (
             <>
-              <h2>Update Greyscale %</h2>
               <div className="form-group">
                 <label>Product Flow:</label>
                 <select value={updateParams.productFlow} onChange={(e) => setUpdateParams({ ...updateParams, productFlow: e.target.value })}>
@@ -233,11 +227,11 @@
               </div>
               <div className="form-group">
                 <label>Greyscale %:</label>
-                <input type="number" min="0" max="100" placeholder="Enter %" onChange={(e) => setUpdateParams({ ...updateParams, greyscale: e.target.value })}/>
+                <input type="number" min="0" max="100" onChange={(e) => setUpdateParams({ ...updateParams, greyscale: e.target.value })}/>
               </div>
               <div className="form-group">
                 <label>Remark:</label>
-                <input type="text" placeholder="Enter remark" onChange={(e) => setUpdateParams({ ...updateParams, remark: e.target.value })}/>
+                <input type="text" onChange={(e) => setUpdateParams({ ...updateParams, remark: e.target.value })}/>
               </div>
               <button onClick={handleUpdate}>Update</button>
               {updateSuccess && <div className="success-banner">Update successful!</div>}
