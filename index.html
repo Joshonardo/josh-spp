@@ -101,50 +101,30 @@
   <div id="root"></div>
 
   <script type="text/babel">
+    const { useState } = React;
+
     function AdminDashboard() {
-      const [activeTab, setActiveTab] = React.useState("search");
-      const [searchParams, setSearchParams] = React.useState({
-        productFlow: "",
-        paymentChannel: ""
-      });
-
-      const [updateParams, setUpdateParams] = React.useState({
-        productFlow: "",
-        paymentChannel: "",
-        greyscale: "",
-        remark: ""
-      });
-
-      const [searchResults, setSearchResults] = React.useState(null);
-      const [updateSuccess, setUpdateSuccess] = React.useState(false);
-      const [logs, setLogs] = React.useState([]);
-      const [changeIdCounter, setChangeIdCounter] = React.useState(1);
+      const [activeTab, setActiveTab] = useState("search");
+      const [searchParams, setSearchParams] = useState({ productFlow: "", paymentChannel: "" });
+      const [updateParams, setUpdateParams] = useState({ productFlow: "", paymentChannel: "", greyscale: "", remark: "" });
+      const [searchResults, setSearchResults] = useState(null);
+      const [updateSuccess, setUpdateSuccess] = useState(false);
+      const [logs, setLogs] = useState([]);
+      const [changeIdCounter, setChangeIdCounter] = useState(1);
 
       const getCurrentTimestampGMT8 = () => {
         const now = new Date();
-        return new Date(now.getTime() + 8 * 60 * 60 * 1000)
-          .toISOString()
-          .replace("T", " ")
-          .slice(0, 19);
+        return new Date(now.getTime() + 8 * 60 * 60 * 1000).toISOString().replace("T", " ").slice(0, 19);
       };
 
       const handleSearch = () => {
-        console.log("Searching with params", searchParams);
         setSearchResults([
-          {
-            productFlow: searchParams.productFlow || "CsB",
-            paymentChannel: searchParams.paymentChannel || "Wallet",
-            status: "Active"
-          },
+          { productFlow: searchParams.productFlow || "CsB", paymentChannel: searchParams.paymentChannel || "Wallet", status: "Active" },
           { productFlow: "BsC", paymentChannel: "SPL", status: "Inactive" }
         ]);
       };
 
       const handleUpdate = () => {
-        console.log("Updating greyscale %", updateParams);
-        setUpdateSuccess(true);
-        setTimeout(() => setUpdateSuccess(false), 3000);
-
         const newLog = {
           changeId: changeIdCounter,
           operator: "josh.tsaoch@seamoney.com",
@@ -154,25 +134,24 @@
           greyscale: updateParams.greyscale || "-",
           remark: updateParams.remark || "-"
         };
-
         setLogs([newLog, ...logs]);
         setChangeIdCounter(changeIdCounter + 1);
+        setUpdateSuccess(true);
+        setTimeout(() => setUpdateSuccess(false), 3000);
       };
 
       const handleRollback = () => {
         if (logs.length < 2) return;
-        const previousLog = logs[1];
-
+        const prev = logs[1];
         const rollbackLog = {
           changeId: changeIdCounter,
           operator: "josh.tsaoch@seamoney.com",
           updateTime: getCurrentTimestampGMT8(),
-          productFlow: previousLog.productFlow,
-          paymentChannel: previousLog.paymentChannel,
-          greyscale: previousLog.greyscale,
+          productFlow: prev.productFlow,
+          paymentChannel: prev.paymentChannel,
+          greyscale: prev.greyscale,
           remark: "Rollback"
         };
-
         setLogs([rollbackLog, ...logs]);
         setChangeIdCounter(changeIdCounter + 1);
       };
@@ -182,12 +161,8 @@
           <h1>Admin Dashboard</h1>
 
           <div className="tabs">
-            <button className={`tab ${activeTab === "search" ? "active" : ""}`} onClick={() => setActiveTab("search")}>
-              Search CCMS
-            </button>
-            <button className={`tab ${activeTab === "update" ? "active" : ""}`} onClick={() => setActiveTab("update")}>
-              Update CCMS
-            </button>
+            <button className={`tab ${activeTab === "search" ? "active" : ""}`} onClick={() => setActiveTab("search")}>Search CCMS</button>
+            <button className={`tab ${activeTab === "update" ? "active" : ""}`} onClick={() => setActiveTab("update")}>Update CCMS</button>
           </div>
 
           {activeTab === "search" && (
@@ -195,12 +170,7 @@
               <h2>Search Greyscale %</h2>
               <div className="form-group">
                 <label>Product Flow:</label>
-                <select
-                  value={searchParams.productFlow}
-                  onChange={(e) =>
-                    setSearchParams({ ...searchParams, productFlow: e.target.value })
-                  }
-                >
+                <select value={searchParams.productFlow} onChange={(e) => setSearchParams({ ...searchParams, productFlow: e.target.value })}>
                   <option value="">Select</option>
                   <option value="CsB">CsB</option>
                   <option value="BsC">BsC</option>
@@ -209,12 +179,7 @@
               </div>
               <div className="form-group">
                 <label>Payment Channel:</label>
-                <select
-                  value={searchParams.paymentChannel}
-                  onChange={(e) =>
-                    setSearchParams({ ...searchParams, paymentChannel: e.target.value })
-                  }
-                >
+                <select value={searchParams.paymentChannel} onChange={(e) => setSearchParams({ ...searchParams, paymentChannel: e.target.value })}>
                   <option value="">Select</option>
                   <option value="Wallet">Wallet</option>
                   <option value="SPL">SPL</option>
@@ -222,7 +187,6 @@
                 </select>
               </div>
               <button onClick={handleSearch}>Search</button>
-
               {searchResults && (
                 <table>
                   <thead>
@@ -233,11 +197,11 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {searchResults.map((result, index) => (
-                      <tr key={index}>
-                        <td>{result.productFlow}</td>
-                        <td>{result.paymentChannel}</td>
-                        <td>{result.status}</td>
+                    {searchResults.map((r, i) => (
+                      <tr key={i}>
+                        <td>{r.productFlow}</td>
+                        <td>{r.paymentChannel}</td>
+                        <td>{r.status}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -251,12 +215,7 @@
               <h2>Update Greyscale %</h2>
               <div className="form-group">
                 <label>Product Flow:</label>
-                <select
-                  value={updateParams.productFlow}
-                  onChange={(e) =>
-                    setUpdateParams({ ...updateParams, productFlow: e.target.value })
-                  }
-                >
+                <select value={updateParams.productFlow} onChange={(e) => setUpdateParams({ ...updateParams, productFlow: e.target.value })}>
                   <option value="">Select</option>
                   <option value="CsB">CsB</option>
                   <option value="BsC">BsC</option>
@@ -265,12 +224,7 @@
               </div>
               <div className="form-group">
                 <label>Payment Channel:</label>
-                <select
-                  value={updateParams.paymentChannel}
-                  onChange={(e) =>
-                    setUpdateParams({ ...updateParams, paymentChannel: e.target.value })
-                  }
-                >
+                <select value={updateParams.paymentChannel} onChange={(e) => setUpdateParams({ ...updateParams, paymentChannel: e.target.value })}>
                   <option value="">Select</option>
                   <option value="Wallet">Wallet</option>
                   <option value="SPL">SPL</option>
@@ -279,30 +233,14 @@
               </div>
               <div className="form-group">
                 <label>Greyscale %:</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  placeholder="Enter %"
-                  onChange={(e) =>
-                    setUpdateParams({ ...updateParams, greyscale: e.target.value })
-                  }
-                />
+                <input type="number" min="0" max="100" placeholder="Enter %" onChange={(e) => setUpdateParams({ ...updateParams, greyscale: e.target.value })}/>
               </div>
               <div className="form-group">
                 <label>Remark:</label>
-                <input
-                  type="text"
-                  placeholder="Enter remark"
-                  onChange={(e) =>
-                    setUpdateParams({ ...updateParams, remark: e.target.value })
-                  }
-                />
+                <input type="text" placeholder="Enter remark" onChange={(e) => setUpdateParams({ ...updateParams, remark: e.target.value })}/>
               </div>
               <button onClick={handleUpdate}>Update</button>
-              {updateSuccess && (
-                <div className="success-banner">Update successful!</div>
-              )}
+              {updateSuccess && <div className="success-banner">Update successful!</div>}
 
               <h2>Update Logs</h2>
               <table>
@@ -310,7 +248,7 @@
                   <tr>
                     <th>Change ID</th>
                     <th>Operator</th>
-                    <th>Update Time (GMT+8)</th>
+                    <th>Update Time</th>
                     <th>Product Flow</th>
                     <th>Payment Channel</th>
                     <th>Greyscale %</th>
