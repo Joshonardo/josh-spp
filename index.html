@@ -1,75 +1,107 @@
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Alert } from "@/components/ui/alert";
-import { Sidebar } from "@/components/ui/sidebar";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        input, button {
+            margin: 5px;
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .log {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
 
-export default function AdminDashboard() {
-  const [searchParams, setSearchParams] = useState({
-    productFlow: "",
-    paymentChannel: "",
-    userScope: "",
-    merchantScope: ""
-  });
-  const [updateStatus, setUpdateStatus] = useState(null);
-  const [logs, setLogs] = useState([]);
+    <div id="root"></div>
 
-  const handleSearch = () => {
-    console.log("Searching with params", searchParams);
-  };
+    <script type="text/babel">
+        function AdminDashboard() {
+            const [searchParams, setSearchParams] = React.useState({
+                productFlow: "",
+                paymentChannel: "",
+                userScope: "",
+                merchantScope: ""
+            });
+            const [updateStatus, setUpdateStatus] = React.useState(null);
+            const [logs, setLogs] = React.useState([]);
 
-  const handleUpdate = () => {
-    console.log("Updating greyscale %", searchParams);
-    setUpdateStatus({ success: true, message: "Update successful!" });
-    setLogs([...logs, { timestamp: new Date().toISOString(), status: "Success" }]);
-  };
+            const handleSearch = () => {
+                console.log("Searching with params", searchParams);
+                alert("Search triggered! Check console.");
+            };
 
-  return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar className="w-64 bg-blue-800 text-white p-4">
-        <h2 className="text-xl font-bold">CCMS</h2>
-      </Sidebar>
-      <div className="flex-1 p-6">
-        <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-        <Card className="mt-6 p-6 bg-white shadow-lg rounded-lg">
-          <h2 className="text-lg font-semibold text-gray-700">Search Greyscale %</h2>
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <Input className="p-2 border rounded" placeholder="Product Flow" onChange={(e) => setSearchParams({ ...searchParams, productFlow: e.target.value })} />
-            <Input className="p-2 border rounded" placeholder="Payment Channel" onChange={(e) => setSearchParams({ ...searchParams, paymentChannel: e.target.value })} />
-            <Input className="p-2 border rounded" placeholder="User Scope" onChange={(e) => setSearchParams({ ...searchParams, userScope: e.target.value })} />
-            <Input className="p-2 border rounded" placeholder="Merchant Scope" onChange={(e) => setSearchParams({ ...searchParams, merchantScope: e.target.value })} />
-          </div>
-          <Button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={handleSearch}>Search</Button>
-        </Card>
+            const handleUpdate = () => {
+                console.log("Updating greyscale %", searchParams);
+                setUpdateStatus({ success: true, message: "Update successful!" });
+                setLogs([...logs, { timestamp: new Date().toLocaleString(), status: "Success" }]);
+            };
 
-        <Card className="mt-6 p-6 bg-white shadow-lg rounded-lg">
-          <h2 className="text-lg font-semibold text-gray-700">Update Greyscale %</h2>
-          <Button className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" onClick={handleUpdate}>Update</Button>
-          {updateStatus && <Alert className="mt-4 text-green-700">{updateStatus.message}</Alert>}
-        </Card>
+            return (
+                <div className="container">
+                    <h1>Admin Dashboard</h1>
 
-        <Card className="mt-6 p-6 bg-white shadow-lg rounded-lg">
-          <h2 className="text-lg font-semibold text-gray-700">Update Logs</h2>
-          <Table className="mt-4 w-full border-collapse border border-gray-300">
-            <TableHeader>
-              <TableRow className="bg-gray-200">
-                <TableHead className="border p-2">Timestamp</TableHead>
-                <TableHead className="border p-2">Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {logs.map((log, index) => (
-                <TableRow key={index} className="hover:bg-gray-100">
-                  <TableCell className="border p-2">{log.timestamp}</TableCell>
-                  <TableCell className="border p-2">{log.status}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
-      </div>
-    </div>
-  );
-}
+                    <h2>Search Greyscale %</h2>
+                    <input type="text" placeholder="Product Flow" 
+                        onChange={(e) => setSearchParams({ ...searchParams, productFlow: e.target.value })} />
+                    <input type="text" placeholder="Payment Channel" 
+                        onChange={(e) => setSearchParams({ ...searchParams, paymentChannel: e.target.value })} />
+                    <button onClick={handleSearch}>Search</button>
+
+                    <h2>Update Greyscale %</h2>
+                    <button onClick={handleUpdate}>Update</button>
+                    {updateStatus && <p className="log">{updateStatus.message}</p>}
+
+                    <h2>Update Logs</h2>
+                    {logs.map((log, index) => (
+                        <div key={index} className="log">
+                            {log.timestamp} - {log.status}
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<AdminDashboard />);
+    </script>
+
+</body>
+</html>
