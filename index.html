@@ -51,6 +51,15 @@
         button:hover {
             background: #0056b3;
         }
+        .success-banner {
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -83,11 +92,12 @@
             const [updateParams, setUpdateParams] = React.useState({
                 productFlow: "",
                 paymentChannel: "",
+                greyscale: "",
                 remark: ""
             });
 
             const [searchResults, setSearchResults] = React.useState(null);
-            const [updateStatus, setUpdateStatus] = React.useState(null);
+            const [updateSuccess, setUpdateSuccess] = React.useState(false);
             const [logs, setLogs] = React.useState([]);
             const [changeIdCounter, setChangeIdCounter] = React.useState(1);
 
@@ -106,7 +116,9 @@
 
             const handleUpdate = () => {
                 console.log("Updating greyscale %", updateParams);
-                setUpdateStatus({ success: true, message: "Update successful!" });
+
+                setUpdateSuccess(true);
+                setTimeout(() => setUpdateSuccess(false), 3000); // Hide banner after 3s
 
                 const newLog = {
                     changeId: changeIdCounter,
@@ -114,6 +126,7 @@
                     updateTime: getCurrentTimestampGMT8(),
                     productFlow: updateParams.productFlow || "-",
                     paymentChannel: updateParams.paymentChannel || "-",
+                    greyscale: updateParams.greyscale || "-",
                     remark: updateParams.remark || "-"
                 };
 
@@ -196,12 +209,17 @@
                     </div>
 
                     <div className="form-group">
+                        <label>Greyscale %:</label>
+                        <input type="number" min="0" max="100" placeholder="Enter %" onChange={(e) => setUpdateParams({ ...updateParams, greyscale: e.target.value })} />
+                    </div>
+
+                    <div className="form-group">
                         <label>Remark:</label>
                         <input type="text" placeholder="Enter remark" onChange={(e) => setUpdateParams({ ...updateParams, remark: e.target.value })} />
                     </div>
 
                     <button onClick={handleUpdate}>Update</button>
-                    {updateStatus && <p>{updateStatus.message}</p>}
+                    {updateSuccess && <div className="success-banner">Update successful!</div>}
 
                     {/* Update Logs Table */}
                     <h2>Update Logs</h2>
@@ -213,6 +231,7 @@
                                 <th>Update Time (GMT+8)</th>
                                 <th>Product Flow</th>
                                 <th>Payment Channel</th>
+                                <th>Greyscale %</th>
                                 <th>Remark</th>
                             </tr>
                         </thead>
@@ -224,6 +243,7 @@
                                     <td>{log.updateTime}</td>
                                     <td>{log.productFlow}</td>
                                     <td>{log.paymentChannel}</td>
+                                    <td>{log.greyscale}</td>
                                     <td>{log.remark}</td>
                                 </tr>
                             ))}
