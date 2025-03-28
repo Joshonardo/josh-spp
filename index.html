@@ -1,79 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link to ShopeePay</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-        header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px 0;
-        }
-        header img {
-            max-width: 50px;
-            margin: 0 18px;
-        }
-        main {
-            margin: 20px 0;
-        }
-        main img {
-            width: 200px;
-            height: 200px;
-            margin: 30px 0;
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        footer {
-            margin-top: 30px;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-ShopeePay-V.png" alt="Payment Logo">
-        <span style="font-size: 36px; font-weight: bold;">  ↔  </span>
-        <img src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA" alt="Merchant Logo">
-    </header>
-    <main>
-        <p style="font-size: 16px; color: #333;">
-            Click the push notification, or tap on the QR code / scan the QR code to open ShopeePay App.
-        </p>
-    <a href="https://shopeepay.sg/u/account-linking-agreement_sg?client_id=1&return_url=https%3A%2F%2Fwww.google.com&state=%7B%22purpose%22%3A%22bXP4e5rkgZT%22%7D&ticket=126112560906057282">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://mapi.gw.uat.airpay.co.id/v1/pre-linking/qr/download?qr=6RUN05qdaGlecfEnbqYkfxtvXwQTkMHkt6periEqSv&size=200x200" alt="QR Code">
-    </a>
-    </main>
-    <footer>
-        <button onclick="redirect()">Open Shopee App</button>
-    </footer>
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Alert } from "@/components/ui/alert";
+import { Sidebar } from "@/components/ui/sidebar";
 
-    <script>
-        function redirect() {
-            window.open("https://www.google.com.tw", "_blank");
-        }
-    </script>
-</body>
-</html>
+export default function AdminDashboard() {
+  const [searchParams, setSearchParams] = useState({
+    productFlow: "",
+    paymentChannel: "",
+    userScope: "",
+    merchantScope: ""
+  });
+  const [updateStatus, setUpdateStatus] = useState(null);
+  const [logs, setLogs] = useState([]);
+
+  const handleSearch = () => {
+    console.log("Searching with params", searchParams);
+    // Implement API call to fetch data
+  };
+
+  const handleUpdate = () => {
+    console.log("Updating greyscale %", searchParams);
+    // Implement API call to update greyscale %
+    setUpdateStatus({ success: true, message: "Update successful!" });
+    setLogs([...logs, { timestamp: new Date().toISOString(), status: "Success" }]);
+  };
+
+  return (
+    <div className="flex h-screen">
+      <Sidebar>
+        <div className="p-4">CCMS</div>
+      </Sidebar>
+      <div className="flex-1 p-6">
+        <h1 className="text-xl font-bold">Admin Dashboard</h1>
+        <Card className="mt-4 p-4">
+          <h2 className="text-lg font-semibold">Search Greyscale %</h2>
+          <div className="grid grid-cols-2 gap-4 mt-2">
+            <Input placeholder="Product Flow" onChange={(e) => setSearchParams({ ...searchParams, productFlow: e.target.value })} />
+            <Input placeholder="Payment Channel" onChange={(e) => setSearchParams({ ...searchParams, paymentChannel: e.target.value })} />
+            <Input placeholder="User Scope" onChange={(e) => setSearchParams({ ...searchParams, userScope: e.target.value })} />
+            <Input placeholder="Merchant Scope" onChange={(e) => setSearchParams({ ...searchParams, merchantScope: e.target.value })} />
+          </div>
+          <Button className="mt-2" onClick={handleSearch}>Search</Button>
+        </Card>
+
+        <Card className="mt-4 p-4">
+          <h2 className="text-lg font-semibold">Update Greyscale %</h2>
+          <Button className="mt-2" onClick={handleUpdate}>Update</Button>
+          {updateStatus && <Alert className="mt-2">{updateStatus.message}</Alert>}
+        </Card>
+
+        <Card className="mt-4 p-4">
+          <h2 className="text-lg font-semibold">Update Logs</h2>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Timestamp</TableHead>
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {logs.map((log, index) => (
+                <TableRow key={index}>
+                  <TableCell>{log.timestamp}</TableCell>
+                  <TableCell>{log.status}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
+      </div>
+    </div>
+  );
+}
